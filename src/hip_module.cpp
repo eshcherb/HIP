@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include <hsa/hsa_ext_amd.h>
 #include <hsa/amd_hsa_kernel_code.h>
 
+#include <unistd.h>
+#include <sys/syscall.h>
+
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -243,7 +246,7 @@ hipError_t hipHccModuleLaunchKernel(hipFunction_t f, uint32_t globalWorkSizeX,
                                     uint32_t localWorkSizeZ, size_t sharedMemBytes,
                                     hipStream_t hStream, void** kernelParams, void** extra,
                                     hipEvent_t startEvent, hipEvent_t stopEvent) {
-    HIP_INIT_API(f, globalWorkSizeX, globalWorkSizeY, globalWorkSizeZ, localWorkSizeX,
+    HIP_INIT_CB_API(hipHccModuleLaunchKernel, f, globalWorkSizeX, globalWorkSizeY, globalWorkSizeZ, localWorkSizeX,
                  localWorkSizeY, localWorkSizeZ, sharedMemBytes, hStream, kernelParams, extra);
     return ihipLogStatus(ihipModuleLaunchKernel(
         f, globalWorkSizeX, globalWorkSizeY, globalWorkSizeZ, localWorkSizeX, localWorkSizeY,
