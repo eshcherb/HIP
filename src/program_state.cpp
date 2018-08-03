@@ -417,15 +417,15 @@ hsa_executable_t load_executable(const string& file, hsa_executable_t executable
     return executable;
 }
 
-// To force HIP to load the kernels and to setup the function
-// symbol map on program startup
-class startup_kernel_loader {
-   private:
-    startup_kernel_loader() { functions(); }
-    startup_kernel_loader(const startup_kernel_loader&) = delete;
-    startup_kernel_loader& operator=(const startup_kernel_loader&) = delete;
-    static startup_kernel_loader skl;
-};
-startup_kernel_loader startup_kernel_loader::skl;
+// // To force HIP to load the kernels and to setup the function
+// // symbol map on program startup
+// class startup_kernel_loader {
+//    private:
+//     startup_kernel_loader() { functions(); }
+//     startup_kernel_loader(const startup_kernel_loader&) = delete;
+//     startup_kernel_loader& operator=(const startup_kernel_loader&) = delete;
+//     static startup_kernel_loader skl;
+// };
+// startup_kernel_loader startup_kernel_loader::skl;
 
 }  // Namespace hip_impl.
