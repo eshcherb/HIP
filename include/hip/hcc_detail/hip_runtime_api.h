@@ -2431,17 +2431,17 @@ hipError_t hipIpcCloseMemHandle(void* devPtr);
 } /* extern "c" */
 #endif
 
-#include <hip/hip_cbapi.h>
+#include <hip/hip_prof_api.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 /**
  * Callback/Activity API
  */
-hipError_t hipValidateActivityRecord();
-hipError_t hipRegisterApiCallback(uint32_t id, hip_cb_fun_t cb, void* arg);
+hipError_t hipRegisterApiCallback(uint32_t id, void* fun, void* arg);
 hipError_t hipRemoveApiCallback(uint32_t id);
-hipError_t hipRegisterActivityCallback(uint32_t id, hip_cb_act_t cb_act, hip_cb_async_t cb_async, void* arg);
+hipError_t hipRegisterActivityCallback(uint32_t id, void* fun, void* arg);
 hipError_t hipRemoveActivityCallback(uint32_t id);
 static inline const char* hipApiName(const uint32_t& id) { return hip_api_name(id); }
 const char* hipKernelNameRef(hipFunction_t f);

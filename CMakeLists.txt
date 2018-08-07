@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
+
+## Verbose output.
+set ( CMAKE_VERBOSE_MAKEFILE TRUE CACHE BOOL "Verbose Output" FORCE )
+
 project(hip)
 
 #############################
@@ -135,6 +139,19 @@ if(NOT DEFINED COMPILE_HIP_ATP_MARKER)
 endif()
 add_to_config(_buildInfo COMPILE_HIP_ATP_MARKER)
 
+################
+# Detect profiling API
+################
+if (USE_PROF_API EQUAL 1)
+add_definitions(-DUSE_PROF_API=1)
+find_path(PROF_API_HEADER_DIR NAMES prof_protocol.h PATHS ${PROF_API_HEADER_PATH} /opt/rocm/roctracer/include/roctracer NO_DEFAULT_PATH)
+if (NOT PROF_API_HEADER_DIR)
+  MESSAGE("Profiling API header not found, use -DPROF_API_HEADER_PATH=<path to prof_protocol.h header>")
+else ()
+  include_directories ( ${PROF_API_HEADER_DIR} )
+endif ()
+MESSAGE("PROF_API_HEADER_DIR = ${PROF_API_HEADER_DIR}")
+endif ()
 
 #############################
 # Build steps
@@ -420,5 +437,11 @@ if(${RUN_HIT} EQUAL 0)
 else()
     message(STATUS "Testing targets will not be available. To enable them please ensure that the HIP installation directory is writeable. Use -DCMAKE_INSTALL_PREFIX to specify a suitable location")
 endif()
+
+#############################
+# Needed links
+execute_process ( COMMAND sh -xc "cd ${CMAKE_CURRENT_SOURCE_DIR}/lib; ln -s ../src/hip_hc.ll" )
+execute_process ( COMMAND sh -xc "cd ${CMAKE_CURRENT_SOURCE_DIR}/lib; ln -s ../src/../src/hip_hc_gfx803.ll" )
+#############################
 
 # vim: ts=4:sw=4:expandtab:smartindent

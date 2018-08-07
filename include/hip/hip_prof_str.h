@@ -1,18 +1,11 @@
 // automatically generated sources
-#ifndef _HIP_CBSTR_H
-#define _HIP_CBSTR_H
+#ifndef _HIP_PROF_STR_H
+#define _HIP_PROF_STR_H
 #include <sstream>
 #include <string>
 
-// HIP API callbacks function type
-struct hip_cb_data_t;
-struct hip_act_record_t;
-typedef void (*hip_cb_fun_t)(uint32_t domain, uint32_t cid, const void* data, void* arg);
-typedef hip_act_record_t* (*hip_cb_act_t)(uint32_t cid, hip_act_record_t* record, const void* data, void* arg);
-typedef void (*hip_cb_async_t)(uint32_t op_id, void* record, void* arg);
-
 // HIP API callbacks ID enumaration
-enum hip_cb_id_t {
+enum hip_api_id_t {
   HIP_API_ID_hipHostFree = 0,
   HIP_API_ID_hipMemcpyToSymbolAsync = 1,
   HIP_API_ID_hipMallocPitch = 2,
@@ -281,7 +274,7 @@ static const char* hip_api_name(const uint32_t& id) {
 };
 
 // HIP API callbacks data structure
-struct hip_cb_data_t {
+struct hip_api_data_t {
   uint64_t correlation_id;
   uint32_t phase;
   union {
@@ -2239,29 +2232,4 @@ const char* hipApiString(hip_cb_id_t id, const hip_cb_data_t* data) {
 };
 #endif
 
-// HIP API activity record type
-// Base record type
-struct hip_act_record_t {
-  uint32_t domain;                                                    // activity domain id
-  uint32_t op_id;                                                     // operation id, dispatch/copy/barrier
-  uint32_t activity_kind;                                             // activity kind
-  uint64_t correlation_id;                                            // activity correlation ID
-  uint64_t begin_ns;                                                  // host begin timestamp, nano-seconds
-  uint64_t end_ns;                                                    // host end timestamp, nano-seconds
-};
-// Async record type
-struct hip_async_record_t : hip_act_record_t {
-  int device_id;
-  uint64_t stream_id;
-};
-// Dispatch record type
-struct hip_dispatch_record_t : hip_async_record_t {};
-// Barrier record type
-struct hip_barrier_record_t : hip_async_record_t {};
-// Memcpy record type
-struct hip_copy_record_t : hip_async_record_t {
-  size_t bytes;
-};
-// Generic async operation record
-typedef hip_copy_record_t hip_ops_record_t;
-#endif  // _HIP_CBSTR
+#endif  // _HIP_PROF_STR_H
